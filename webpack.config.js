@@ -50,7 +50,7 @@ const uglify = new webpack.optimize.UglifyJsPlugin({ // eslint-disable-line
 const config = {
   entry: {
     // we only have 1 entry, but I've set it up for multiple in the future
-    App: './public/javascripts/delicious-app.js'
+    App: './public/javascripts/restaurant-app.js'
   },
   // we're using sourcemaps and here is where we specify which kind of sourcemap to use
   devtool: 'source-map',
@@ -79,3 +79,30 @@ const config = {
 process.noDeprecation = true;
 
 module.exports = config;
+
+function returnDate() {
+  var year = now.getFullYear();
+  var month = now.getMonth() + 1;
+  var day = returnDay()
+  return year + '-' + month + '-' + day
+}
+
+function returnDay() {
+  if (now.getDate() < 10) {
+    return "0" + now.getDate()
+  } else {
+    return now.getDate()
+  }
+}
+
+function returnTime() {
+  return date.getHours() + ":" + Minutes()
+}
+
+function Minutes() {
+  if (date.getMinutes() < 10) {
+    return "0" + date.getMinutes()
+  } else {
+    return date.getMinutes()
+  }
+}
