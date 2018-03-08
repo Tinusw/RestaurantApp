@@ -79,30 +79,3 @@ const config = {
 process.noDeprecation = true;
 
 module.exports = config;
-
-function returnDate() {
-  var year = now.getFullYear();
-  var month = now.getMonth() + 1;
-  var day = returnDay()
-  return year + '-' + month + '-' + day
-}
-
-function returnDay() {
-  if (now.getDate() < 10) {
-    return "0" + now.getDate()
-  } else {
-    return now.getDate()
-  }
-}
-
-function returnTime() {
-  return date.getHours() + ":" + Minutes()
-}
-
-function Minutes() {
-  if (date.getMinutes() < 10) {
-    return "0" + date.getMinutes()
-  } else {
-    return date.getMinutes()
-  }
-}
