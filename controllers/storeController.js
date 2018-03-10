@@ -38,6 +38,10 @@ exports.editStore = async (req, res) => {
 
 // Update
 exports.updateStore = async (req, res) => {
+  // ensure location is a value type of point
+  // mongoDB issue
+  req.body.location.type = 'Point'
+
   const store = await Store.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
     runValidators: true
