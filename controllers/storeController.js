@@ -1,5 +1,25 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store');
+const multer = require('multer')
+const jimp = require('jimp')
+const uuid = require('uuid')
+
+// config for multer image uploads
+const multerOptions = {
+  storage: multer.memoryStorage(),
+  fileFilter(req, file, next) {
+    const isPhoto = file.mimetype.startsWith('image/');
+    // passing null/true
+    // null says no error message, true says continue
+    if(isPhoto) {
+      next(null, true)
+    } else {
+      next({
+        messsage: 'Bad file format/type'
+      }, false);
+    }
+  }
+}
 
 // Index
 exports.homePage = (req, res) => {
@@ -9,6 +29,20 @@ exports.homePage = (req, res) => {
 // New
 exports.addStore = (req, res) => {
   res.render('editStore', { title: 'Add Store' })
+};
+
+// middleWare for create
+// tells middleware to look for a single field for uploads
+exports.upload = multer(multerOptions).single('photo');
+
+exports.resize = async (req, res, next) => {
+  // only run if there is something to resize
+  console.log(req.file)
+  if (!req.file) {
+    next();
+    return;
+  }
+  console.log(req.file)
 }
 
 // Create
