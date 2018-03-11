@@ -1,8 +1,8 @@
 const mongoose = require('mongoose');
 const Store = mongoose.model('Store');
-const multer = require('multer')
-const jimp = require('jimp')
-const uuid = require('uuid')
+const multer = require('multer');
+const jimp = require('jimp');
+const uuid = require('uuid');
 
 // config for multer image uploads
 const multerOptions = {
@@ -37,12 +37,18 @@ exports.upload = multer(multerOptions).single('photo');
 
 exports.resize = async (req, res, next) => {
   // only run if there is something to resize
-  console.log(req.file)
   if (!req.file) {
     next();
     return;
   }
-  console.log(req.file)
+  const extension = req.file.mimetype.split('/')[1];
+  req.body.photo = `${uuid.v4()}.${extension}`;
+
+  // Time to resize & save
+  const photo = await jimp.read(req.file.buffer);
+  await photo.resize(800, jimp.AUTO);
+  await photo.write(`./public/uploads/${req.body.photo}`);
+  next();
 }
 
 // Create
