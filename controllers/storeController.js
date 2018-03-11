@@ -65,9 +65,15 @@ exports.getStores = async (req, res) => {
 }
 
 // Show
-exports.getStore = async (req, res) => {
+exports.getStore = async (req, res, next) => {
   const store = await Store.findOne({slug: req.params.slug});
-  res.render('show', { title: 'Stores', store });
+
+  // check if record exists
+  if(!store) {
+    return next();
+  }
+
+  res.render('show', { title: `${store.name}`, store });
 }
 
 // Edit
