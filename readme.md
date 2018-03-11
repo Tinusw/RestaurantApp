@@ -1,27 +1,17 @@
-## What is this?
+## Restaurant App
 
-Just you wait folks!
+This is a simple application where users can upload their favourite restaurants. They can:
+- tag them
+- rate them
+- add location data for them
+- add comments regarding their experiences
 
-## Sample Data
+Restaurants are then fully CRUD'able, search-able and sort-able via tags.
 
-To load sample data, run the following command in your terminal:
+# How to set it up
+- clone the repo
+- configure environment variables (see `example_variables.env` for template)
+- npm install
+- npm start
 
-```bash
-npm run sample
-```
-
-If you have previously loaded in this data, you can wipe your database 100% clean with:
-
-```bash
-npm run blowitallaway
-```
-
-That will populate 16 stores with 3 authors and 41 reviews. The logins for the authors are as follows:
-
-|Name|Email (login)|Password|
-|---|---|---|
-|Wes Bos|wes@example.com|wes|
-|Debbie Downer|debbie@example.com|debbie|
-|Beau|beau@example.com|beau|
-
-
+#### Ensure you have mongodb up and running!
