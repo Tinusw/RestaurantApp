@@ -2,6 +2,10 @@ const mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
 const slug = require('slugs');
 
+//
+// Schema definition
+//
+
 const storeSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -37,6 +41,10 @@ const storeSchema = new mongoose.Schema({
   }
 });
 
+//
+// Hooks
+//
+
 storeSchema.pre('save', async function(next) {
   // only change slug if name is modified
   // Todo -> ensure uniqueness
@@ -59,5 +67,21 @@ storeSchema.pre('save', async function(next) {
 
   next();
 })
+
+//
+// Model methods
+//
+storeSchema.statics.getTagsList = function() {
+  return this.aggregate([
+    { $unwind: '$tags' },
+    { $group: { _id: '$tags', count: { $sum: 1 } }},
+    { $sort: { count: -1 }}
+  ], function( err, result ) {
+    if (err) {
+      console.log(err);
+      return;
+    }
+  });
+}
 
 module.exports = mongoose.model('Store', storeSchema);
