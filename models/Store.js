@@ -37,13 +37,26 @@ const storeSchema = new mongoose.Schema({
   }
 });
 
-storeSchema.pre('save', function(next) {
+storeSchema.pre('save', async function(next) {
   // only change slug if name is modified
   // Todo -> ensure uniqueness
   if (!this.isModified('name')) {
     return next();
   }
   this.slug = slug(this.name);
+
+  // Find other stores by slug so we can keep them unique
+  const slugRegex = new RegExp(`^(${this.slug})((-[0-9]*$)?)$`, 'i');
+  // constructor allows us to access the DB inside of it's schema call
+  const storesWithSlug = await this.constructor.find({
+    slug: slugRegex
+  });
+
+  // If match is found then add an increment based on how many matches are found
+  if(storesWithSlug.length){
+    this.slug = `${this.slug}-${storesWithSlug.length + 1}`
+  }
+
   next();
 })
 
