@@ -76,11 +76,21 @@ exports.getStore = async (req, res, next) => {
   res.render('show', { title: `${store.name}`, store });
 }
 
-// show by tag
+// show/filter by tag if present
 exports.getStoresByTag = async (req, res) => {
-  const tags = await Store.getTagsList();
-  const title = req.params.tag
-  res.render('tag', {tags, title});
+  const tag = req.params.tag;
+
+  const tagQuery = tag || { $exists: true };
+  const tagsPromise = Store.getTagsList();
+  const storesPromise = Store.find({
+    tags: tagQuery
+  });
+
+  // Await multiple promises using .all and immediately store in two consts
+  const [tags, stores] = await Promise.all([tagsPromise, storesPromise])
+  res.render('tag', {
+    tags, title: tag, stores
+  });
 }
 
 // Edit
@@ -93,7 +103,7 @@ exports.editStore = async (req, res) => {
 exports.updateStore = async (req, res) => {
   // ensure location is a value type of point
   // mongoDB issue
-  req.body.location.type = 'Point'
+  req.body.location.type = 'Point';
 
   const store = await Store.findOneAndUpdate({ _id: req.params.id }, req.body, {
     new: true,
