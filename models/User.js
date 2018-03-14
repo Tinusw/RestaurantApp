@@ -4,7 +4,7 @@ mongoose.Promise = global.Promise;
 const md5 = require('md5');
 const validator = require('validator');
 const mongodbErrorHandler = require('mongoose-mongodb-errors');
-const passportLocalMongoose = require('password-local-mongoose');
+const passport = require('passport-local-mongoose');
 
 //
 // Schema definition
@@ -27,7 +27,7 @@ const userSchema = new Schema({
 });
 
 // Middleware to add authentication via passport.js
-userSchema.plugin(passportLocalMongoose, { usernameField: 'email' });
+userSchema.plugin(passport, { usernameField: 'email' });
 userSchema.plugin(mongodbErrorHandler);
 
 module.exports = mongoose.model('User', userSchema);

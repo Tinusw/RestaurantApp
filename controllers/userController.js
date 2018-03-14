@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const User = mongoose.model('User');
+const promisify = require('es6-promisify');
 
 //
 // Middleware
@@ -34,6 +36,19 @@ exports.loginForm = (req, res) => {
 }
 
 exports.registerForm = (req, res) => {
-  console.log('validated')
   res.render('register', { title: 'register' })
 }
+
+exports.register = async (req, res, next) => {
+  const user = new User({
+    email: req.body.email,
+    name: req.body.name,
+  })
+
+  // mongoose-passport password generator stuff
+  // unfortunately register method doesn't support promises yet, hence the use of promisefy
+  // https://github.com/jaredhanson/passport/issues/536
+  const registerWithPromisefy = promisify(User.register, User);
+  await registerWithPromisefy(user, req.body.password);
+  next();
+};
