@@ -4,6 +4,10 @@ const multer = require('multer');
 const jimp = require('jimp');
 const uuid = require('uuid');
 
+//
+// Middleware
+//
+
 // config for multer image uploads
 const multerOptions = {
   storage: multer.memoryStorage(),
@@ -20,6 +24,10 @@ const multerOptions = {
     }
   }
 }
+
+//
+// Controller actions
+//
 
 // Index
 exports.homePage = (req, res) => {
