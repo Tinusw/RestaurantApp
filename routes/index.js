@@ -36,8 +36,10 @@ router.get('/stores/:id/edit', catchErrors(storeController.
 
 // User login
 router.get('/login', userController.loginForm);
-router.get('/register', userController.registerForm);
+router.post('/login', authController.login)
 
+// to register form
+router.get('/register', userController.registerForm);
 router.post('/register',
   userController.validateRegister,
   userController.register,
