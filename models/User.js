@@ -26,6 +26,11 @@ const userSchema = new Schema({
   }
 });
 
+userSchema.virtual('gravatar').get(function(){
+  const hash = md5(this.email);
+  return `https://gravatar.com/avatar/${hash}?s=200`
+})
+
 // Middleware to add authentication via passport.js
 userSchema.plugin(passport, { usernameField: 'email' });
 userSchema.plugin(mongodbErrorHandler);
