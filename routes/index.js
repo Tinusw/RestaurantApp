@@ -15,7 +15,9 @@ router.get('/stores/:slug', catchErrors(storeController.getStore));
 
 router.get('/add',
   authController.isLoggedIn,
-  storeController.addStore);
+  storeController.addStore
+);
+
 router.post('/add',
   storeController.upload,
   catchErrors(storeController.resize),
@@ -49,5 +51,13 @@ router.post('/register',
 );
 
 router.get('/logout', authController.logout);
+
+router.get('/account',
+  authController.isLoggedIn,
+  userController.account
+);
+
+router.post('/account', catchErrors(storeController.updateAccount));
+
 
 module.exports = router;

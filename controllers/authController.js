@@ -18,7 +18,7 @@ exports.logout = (req, res) => {
 };
 
 
-exports.isLoggedIn = (req, res) => {
+exports.isLoggedIn = (req, res, next) => {
   // Check if authenticated using passport
   if(req.isAuthenticated()) {
     next();

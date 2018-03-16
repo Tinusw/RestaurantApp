@@ -33,17 +33,17 @@ exports.validateRegister = (req, res, next) => {
 // Actions
 exports.loginForm = (req, res) => {
   res.render('login', { title: 'Login'} )
-}
+};
 
 exports.registerForm = (req, res) => {
   res.render('register', { title: 'register' })
-}
+};
 
 exports.register = async (req, res, next) => {
   const user = new User({
     email: req.body.email,
     name: req.body.name,
-  })
+  });
 
   // mongoose-passport password generator stuff
   // unfortunately register method doesn't support promises yet, hence the use of promisefy
@@ -52,3 +52,21 @@ exports.register = async (req, res, next) => {
   await registerWithPromisefy(user, req.body.password);
   next();
 };
+
+exports.account = (req, res) => {
+  res.render('account', { title: 'Edit your account' });
+}
+
+exports.updateAccount = async (req, res) => {
+  const updates = {
+    name: req.body.name,
+    email: req.body.email,
+  }
+  const user = await User.findOneAndUpdate(
+    { _id: req.user._id },
+    { $set: updates },
+    { new: true, runValidator: true, context: 'query' }
+  )
+  req.flash('success', 'Profile Updated!');
+  res.redirect('back');
+}
