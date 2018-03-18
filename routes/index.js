@@ -57,7 +57,7 @@ router.get('/account',
   userController.account
 );
 
-router.post('/account', catchErrors(storeController.updateAccount));
+router.post('/account', catchErrors(userController.updateAccount));
 
 
 module.exports = router;
