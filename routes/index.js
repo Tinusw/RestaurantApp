@@ -19,6 +19,7 @@ router.get('/add',
 );
 
 router.post('/add',
+  authController.isLoggedIn,
   storeController.upload,
   catchErrors(storeController.resize),
   catchErrors(storeController.createStore)
