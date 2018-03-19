@@ -31,6 +31,24 @@ exports.isLoggedIn = (req, res, next) => {
   res.redirect("/login");
 };
 
+// used when resetting a user password via email
+exports.consumeToken = async (req, res, next) => {
+  const user = await User.findOne({
+    resetPasswordToken: req.params.token,
+    resetPasswordExpires: {
+      $gt: Date.now()
+    }
+  });
+  if (!user) {
+    req.flash("error", "Token no longer valid");
+    return res.redirect("/login");
+  }
+  next();
+  return user;
+};
+
+// Actions
+
 exports.forgot = async (req, res) => {
   // Find User
   const user = await User.findOne({
@@ -57,16 +75,6 @@ exports.forgot = async (req, res) => {
 };
 
 exports.reset = async (req, res) => {
-  const user = await User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
-    }
-  });
-  if (!user) {
-    req.flash("error", "Token no longer valid");
-    return res.redirect("/login");
-  }
   res.render("reset", { title: "reset your password" });
 };
 
@@ -81,18 +89,9 @@ exports.confirmedPasswords = (req, res, next) => {
 };
 
 exports.update = async (req, res) => {
-  // Refactor for removal of duplicate call on line 56
   const user = await User.findOne({
-    resetPasswordToken: req.params.token,
-    resetPasswordExpires: {
-      $gt: Date.now()
-    }
+    resetPasswordToken: req.params.token
   });
-
-  if (!user) {
-    req.flash("error", "Token no longer valid");
-    return res.redirect("/login");
-  }
 
   const setPassword = promisify(user.setPassword, user);
   await setPassword(req.body.password);
