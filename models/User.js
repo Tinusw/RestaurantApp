@@ -23,7 +23,9 @@ const userSchema = new Schema({
     type: String,
     required: 'Please add a name',
     trim: true
-  }
+  },
+  resetPasswordToken: String,
+  resetPasswordExpires: Date
 });
 
 // Virtual attribute to grab the gravatar
