@@ -49,6 +49,15 @@ const storeSchema = new mongoose.Schema({
 });
 
 //
+// MongoDB Index Definition
+//
+
+storeSchema.index({
+  name: 'text',
+  description: 'text'
+});
+
+//
 // Hooks
 //
 
