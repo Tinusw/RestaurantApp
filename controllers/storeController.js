@@ -78,7 +78,9 @@ exports.getStores = async (req, res) => {
 
 // Show
 exports.getStore = async (req, res, next) => {
-  const store = await Store.findOne({ slug: req.params.slug }).populate('author');
+  const store = await Store.findOne({ slug: req.params.slug }).populate(
+    "author"
+  );
   // check if record exists
   if (!store) {
     return next();
@@ -107,18 +109,18 @@ exports.getStoresByTag = async (req, res) => {
 };
 
 const confirmOwner = (store, user) => {
-  if (!store.author || !store.author.equals(user._id)){
-    return false
+  if (!store.author || !store.author.equals(user._id)) {
+    return false;
   }
-  return true
-}
+  return true;
+};
 
 // Edit
 exports.editStore = async (req, res) => {
   const store = await Store.findOne({ _id: req.params.id });
-  if(!confirmOwner(store, req.user)){
-    req.flash('error', 'cannot edit store as you are not the owner')
-    res.redirect('/')
+  if (!confirmOwner(store, req.user)) {
+    req.flash("error", "cannot edit store as you are not the owner");
+    res.redirect("/");
   }
   res.render("editStore", { title: `Edit ${store.name}`, store });
 };
@@ -143,10 +145,19 @@ exports.updateStore = async (req, res) => {
 };
 
 exports.searchStores = async (req, res) => {
-  const stores = await Store.find({
-    $text: {
-      $search: req.query.q
+  const stores = await Store.find(
+    {
+      $text: {
+        $search: req.query.q
+      }
+    },
+    {
+      score: { $meta: "textScore" }
     }
-  })
-  res.json(stores)
-}
+  )
+    .sort({
+      score: { $meta: "textScore" }
+    })
+    .limit(5);
+  res.json(stores);
+};
