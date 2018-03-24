@@ -85,6 +85,11 @@ storeSchema.pre("save", async function(next) {
 });
 
 //
+// TODO
+// Sanitize input data to strip html content!!!
+//
+
+//
 // Model methods
 //
 storeSchema.statics.getTagsList = function() {

@@ -1,4 +1,5 @@
 import axios from "axios";
+import dompurify from 'dompurify';
 
 function searchResultsHTML(stores) {
   return stores
@@ -32,10 +33,10 @@ function typeAhead(search) {
       .then(res => {
         if (res.data.length) {
           console.log("results found");
-          searchResults.innerHTML = searchResultsHTML(res.data);
+          searchResults.innerHTML = dompurify.sanitize(searchResultsHTML(res.data));
           return
         }
-        searchResults.innerHTML = `<div class="search__result">No results for ${this.vlaue} found!</div>`
+        searchResults.innerHTML = dompurify.sanitize(`<div class="search__result">No results for ${this.vlaue} found!</div>`)
       })
       .catch(err => {
         console.error(err);
