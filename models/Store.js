@@ -46,6 +46,11 @@ const storeSchema = new mongoose.Schema({
     ref: 'User',
     required: 'author must be supplied'
   }
+}, {
+  // by default virtual attributes aren't displayed unless called explicitly
+  // this takes care of that
+  toJSON: { virtuals: true },
+  toObject: {virtuals: true},
 });
 
 //
@@ -111,5 +116,12 @@ storeSchema.statics.getTagsList = function() {
     }
   );
 };
+
+// Virtual attribute to attach reviews via the store_id field on the reviews model
+storeSchema.virtual('reviews', {
+  ref: 'Review',
+  localField: '_id',
+  foreignField: 'store'
+});
 
 module.exports = mongoose.model("Store", storeSchema);

@@ -80,8 +80,7 @@ exports.getStores = async (req, res) => {
 // Show
 exports.getStore = async (req, res, next) => {
   const store = await Store.findOne({ slug: req.params.slug }).populate(
-    "author"
-  );
+    "author reviews");
   // check if record exists
   if (!store) {
     return next();
