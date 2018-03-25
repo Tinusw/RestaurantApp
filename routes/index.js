@@ -3,6 +3,7 @@ const router = express.Router();
 const storeController = require("../controllers/storeController");
 const userController = require("../controllers/userController");
 const authController = require("../controllers/authController");
+const reviewController = require("../controllers/reviewController");
 const { catchErrors } = require("../handlers/errorHandlers");
 
 // Index
@@ -77,10 +78,17 @@ router.get('/hearts',
   catchErrors(storeController.getHearts)
 );
 
+// Reviews
+router.post('/reviews/:id',
+  authController.isLoggedIn,
+  catchErrors(reviewController.addReview)
+)
+
 // API ENDPOINTS
 
 router.get("/api/v1/search", catchErrors(storeController.searchStores))
 router.get("/api/v1/stores/near", catchErrors(storeController.mapStores))
 router.post("/api/v1/stores/:id/heart", catchErrors(storeController.heartStore))
+
 
 module.exports = router;
