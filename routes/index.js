@@ -71,6 +71,8 @@ router.post(
   catchErrors(authController.update)
 );
 
+router.get('/map', storeController.mapPage);
+
 // API ENDPOINTS
 
 router.get("/api/v1/search", catchErrors(storeController.searchStores))
