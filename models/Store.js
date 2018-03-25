@@ -117,6 +117,36 @@ storeSchema.statics.getTagsList = function() {
   );
 };
 
+storeSchema.statics.getTopStores = function() {
+  return this.aggregate([
+    { $lookup: {
+      from: 'reviews', localField: '_id', foreignField: 'store', as: 'reviews'}
+    },
+    { $match: {
+      'reviews.1': { $exists: true } }
+    },
+    { $addFields: {
+      averageRating: { $avg: '$reviews.rating' } }
+    },
+    {
+      $project : {
+        averageRating: true,
+        photo: '$$ROOT.photo',
+        name: '$$ROOT.name',
+        reviews: '$$ROOT.reviews'
+      }
+    },
+    {
+      $sort: {
+        averageRating: -1
+      }
+    },
+    {
+      $limit: 10
+    }
+  ])
+}
+
 // Virtual attribute to attach reviews via the store_id field on the reviews model
 storeSchema.virtual('reviews', {
   ref: 'Review',
