@@ -27,4 +27,16 @@ const reviewSchema = new mongoose.Schema({
   }
 });
 
+// Middleware
+function autopopulate(next) {
+  this.populate('author');
+  next();
+}
+
+// Hooks
+
+// Autopopulate user via id automagically
+reviewSchema.pre('find', autopopulate);
+reviewSchema.pre('findOne', autopopulate)
+
 module.exports = mongoose.model("Review", reviewSchema);
