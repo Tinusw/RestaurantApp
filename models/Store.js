@@ -99,6 +99,17 @@ storeSchema.pre("save", async function(next) {
 //
 
 //
+// Hooks
+//
+function autopopulate(next) {
+  this.populate('reviews');
+  next();
+}
+
+storeSchema.pre('find', autopopulate)
+storeSchema.pre('findOne', autopopulate)
+
+//
 // Model methods
 //
 storeSchema.statics.getTagsList = function() {
@@ -154,5 +165,6 @@ storeSchema.virtual('reviews', {
   localField: '_id',
   foreignField: 'store'
 });
+
 
 module.exports = mongoose.model("Store", storeSchema);
