@@ -159,5 +159,24 @@ exports.searchStores = async (req, res) => {
       score: { $meta: "textScore" }
     })
     .limit(5);
+};
+
+exports.mapStores = async (req, res) => {
+  const cooridnates = [req.query.lng, req.query.lat].map(parseFloat);
+  const query = {
+    location: {
+      $near: {
+        $geometry: {
+          type: "Point",
+          coordinates: cooridnates
+        },
+        // Find in 10km range
+        $maxDistance: 10000
+      }
+    }
+  };
+  const stores = await Store.find(query)
+    .select("slug name description location")
+    .limit(10);
   res.json(stores);
 };

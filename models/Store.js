@@ -57,6 +57,10 @@ storeSchema.index({
   description: 'text'
 });
 
+storeSchema.index({
+  location: '2dsphere'
+});
+
 //
 // Hooks
 //
