@@ -209,5 +209,5 @@ exports.getHearts = async (req, res) => {
 exports.getTopStores = async (req, res) => {
   const stores = await Store.getTopStores();
   // res.render('topStores', { stores, title: 'Top Stores' })
-  res.json(stores)
+  res.render('topStores', { title: 'top stores', stores})
 }

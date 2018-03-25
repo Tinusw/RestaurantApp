@@ -133,7 +133,8 @@ storeSchema.statics.getTopStores = function() {
         averageRating: true,
         photo: '$$ROOT.photo',
         name: '$$ROOT.name',
-        reviews: '$$ROOT.reviews'
+        reviews: '$$ROOT.reviews',
+        slug: '$$ROOT.slug'
       }
     },
     {
