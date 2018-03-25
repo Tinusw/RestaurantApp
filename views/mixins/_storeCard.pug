@@ -9,7 +9,9 @@ mixin storeCard(store= {})
         if user
           .store__action.store__action--heart
             form.heart(method="POST" action=`/api/v1/stores/${store._id}/heart`)
-              button(type="submit" name="heart")
+              - const heartStrings = user.hearts.map(obj => obj.toString())
+              - const heartClass = heartStrings.includes(store._id.toString()) ? 'heart__button--hearted' : ''
+              button.heart__button(type="submit" name="heart" class=heartClass)
                 != h.icon('heart')
       img(src=`/uploads/${store.photo || 'store.png'}`)
       h2.title
